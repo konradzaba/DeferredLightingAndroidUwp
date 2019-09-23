@@ -105,6 +105,7 @@
     <AndroidAsset Include="Assets\Data\Effects\DirectionalLight.mgfx" />
     <AndroidAsset Include="Assets\Data\Effects\PointLight.mgfx" />
     <AndroidAsset Include="Assets\Data\Effects\RenderGBuffer.mgfx" />
+    <AndroidAsset Include="Assets\Data\Effects\org\mgfx.bat" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
@@ -128,6 +129,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\Data\Effects\org\ClearGBuffer.fx" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\Data\Effects\org\CombineFinal.fx" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\Data\Effects\org\DirectionalLight.fx" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\Data\Effects\org\PointLight.fx" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\Data\Effects\org\RenderGBuffer.fx" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
