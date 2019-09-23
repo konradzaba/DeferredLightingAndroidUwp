@@ -66,20 +66,6 @@ namespace DeferredLightingAndroid
 
             GraphicsDevice device = graphicsService.GraphicsDevice;
 
-            //verts[0].Position.X = v2.X;
-            //verts[0].Position.Y = v1.Y;
-
-            //verts[1].Position.X = v1.X;
-            //verts[1].Position.Y = v1.Y;
-
-            //verts[2].Position.X = v1.X;
-            //verts[2].Position.Y = v2.Y;
-
-            //verts[3].Position.X = v2.X;
-            //verts[3].Position.Y = v2.Y;
-
-            //---
-
             verts[0].Position.X = v2.X;
             verts[0].Position.Y = v1.Y;
 
@@ -99,7 +85,6 @@ namespace DeferredLightingAndroid
             verts[5].Position.Y = v1.Y;
 
             device.DrawUserPrimitives(PrimitiveType.TriangleList, verts, 0, 2);
-            //device.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, verts, 0, 4, ib, 0, 2);
         }
         #endregion
     }
