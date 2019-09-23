@@ -3,25 +3,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DeferredLightingAndroid
 {
-    public partial class QuadRenderComponent : Microsoft.Xna.Framework.DrawableGameComponent
+    public partial class QuadRenderComponent : DrawableGameComponent
     {
-        #region Private Members        
         VertexPositionTexture[] verts = null;
-        short[] ib = null;
 
-        #endregion
-
-
-        #region Constructor
         public QuadRenderComponent(Game game)
             : base(game)
         {
-            // TODO: Construct any child components here
-
             IGraphicsDeviceService graphicsService =
     (IGraphicsDeviceService)base.Game.Services.GetService(
                                 typeof(IGraphicsDeviceService));
-
 
             verts = new VertexPositionTexture[]
                     {
@@ -44,21 +35,12 @@ namespace DeferredLightingAndroid
                                 new Vector3(0,0,0),
                                 new Vector2(1,1)),
                     };
-
-            ib = new short[] { 0, 1, 2, 2, 3, 0 };
         }
-        #endregion
-
-
-        #region LoadGraphicsContent
 
         protected override void LoadContent()
         {
         }
-        #endregion
 
-
-        #region void Render(Vector2 v1, Vector2 v2)
         public void Render(Vector2 v1, Vector2 v2)
         {
             IGraphicsDeviceService graphicsService = (IGraphicsDeviceService)
@@ -86,6 +68,5 @@ namespace DeferredLightingAndroid
 
             device.DrawUserPrimitives(PrimitiveType.TriangleList, verts, 0, 2);
         }
-        #endregion
     }
 }
