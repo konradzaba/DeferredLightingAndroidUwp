@@ -63,8 +63,6 @@
     <Compile Include="Activity1.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="GBufferEffect.cs" />
-    <Compile Include="GBufferEffectReader.cs" />
     <Compile Include="QuadRenderComponent.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

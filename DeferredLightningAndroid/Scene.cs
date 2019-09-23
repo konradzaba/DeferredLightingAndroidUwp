@@ -12,7 +12,6 @@ namespace DeferredLightingAndroid
         private Game game;
         Model[] models;
 
-        private Texture2D _texSample;
         private Texture2D groundDiffuse, groundSpecular, groundNormal;
         private Texture2D ship1Diffuse, ship1Specular, ship1Normal;
         private Texture2D ship2Diffuse, ship2Specular, ship2Normal;
@@ -89,24 +88,6 @@ namespace DeferredLightingAndroid
                 }
                 mesh.Draw();
             }
-        }
-        public Texture2D CreateTexture(GraphicsDevice device, int width, int height, Func<int, Color> paint)
-        {
-            //initialize a texture
-            Texture2D texture = new Texture2D(device, width, height);
-
-            //the array holds the color for each pixel in the texture
-            Color[] data = new Color[width * height];
-            for (int pixel = 0; pixel < data.Count(); pixel++)
-            {
-                //the function applies the color according to the specified pixel
-                data[pixel] = paint(pixel);
-            }
-
-            //set the color
-            texture.SetData(data);
-
-            return texture;
         }
     }
 }

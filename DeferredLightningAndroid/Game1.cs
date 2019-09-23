@@ -31,11 +31,8 @@ namespace DeferredLightingAndroid
 
         private Effect pointLightEffect;
         private Effect renderGBufferEffect;
-        //public static Effect RenderGBufferEffect
-        //{
-        //    get { return renderGBufferEffect; }
-        //}
-        private Model sphereModel; //point ligt volume
+
+        private Model sphereModel; //point light volume
 
         private Effect finalCombineEffect;
 

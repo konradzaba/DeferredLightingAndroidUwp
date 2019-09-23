@@ -5,72 +5,20 @@ namespace DeferredLightingAndroid
 {
     public class Camera : Microsoft.Xna.Framework.GameComponent
     {
-        private float cameraArc = -30;
+        public float CameraArc { get; set; } = -30;
 
-        public float CameraArc
-        {
-            get { return cameraArc; }
-            set { cameraArc = value; }
-        }
+        public float CameraRotation { get; set; } = 0;
 
-        private float cameraRotation = 0;
+        public float CameraDistance { get; set; } = 1000;
 
-        public float CameraRotation
-        {
-            get { return cameraRotation; }
-            set { cameraRotation = value; }
-        }
-
-        private float cameraDistance = 1000;
-
-        public float CameraDistance
-        {
-            get { return cameraDistance; }
-            set { cameraDistance = value; }
-        }
-        private Matrix view;
-        private Matrix projection;
-
-        private Vector3 position;
-
-        public Vector3 Position
-        {
-            get { return position; }
-        }
-
-        private float nearPlaneDistance = 1;
-        public float NearPlaneDistance
-        {
-            get { return nearPlaneDistance; }
-            set { nearPlaneDistance = value; }
-        }
-
-        private float farPlaneDistance = 3000;
-        public float FarPlaneDistance
-        {
-            get { return farPlaneDistance; }
-            set { farPlaneDistance = value; }
-        }
+        public Vector3 Position { get; private set; }
+        public float NearPlaneDistance { get; set; } = 1;
+        public float FarPlaneDistance { get; set; } = 3000;
 
 
-        public Matrix View
-        {
-            get
-            {
+        public Matrix View { get; private set; }
 
-                return view;
-            }
-        }
-
-        public Matrix Projection
-        {
-            get
-            {
-
-
-                return projection;
-            }
-        }
+        public Matrix Projection { get; private set; }
 
         KeyboardState currentKeyboardState = new KeyboardState();
         GamePadState currentGamePadState = new GamePadState();
@@ -111,76 +59,76 @@ namespace DeferredLightingAndroid
             if (currentKeyboardState.IsKeyDown(Keys.Up) ||
                 currentKeyboardState.IsKeyDown(Keys.W))
             {
-                cameraArc += time * 0.1f;
+                CameraArc += time * 0.1f;
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Down) ||
                 currentKeyboardState.IsKeyDown(Keys.S))
             {
-                cameraArc -= time * 0.1f;
+                CameraArc -= time * 0.1f;
             }
 
-            cameraArc += currentGamePadState.ThumbSticks.Right.Y * time * 0.05f;
+            CameraArc += currentGamePadState.ThumbSticks.Right.Y * time * 0.05f;
 
             // Limit the arc movement.
-            if (cameraArc > 90.0f)
-                cameraArc = 90.0f;
-            else if (cameraArc < -90.0f)
-                cameraArc = -90.0f;
+            if (CameraArc > 90.0f)
+                CameraArc = 90.0f;
+            else if (CameraArc < -90.0f)
+                CameraArc = -90.0f;
 
             // Check for input to rotate the camera around the model.
             if (currentKeyboardState.IsKeyDown(Keys.Right) ||
                 currentKeyboardState.IsKeyDown(Keys.D))
             {
-                cameraRotation += time * 0.1f;
+                CameraRotation += time * 0.1f;
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Left) ||
                 currentKeyboardState.IsKeyDown(Keys.A))
             {
-                cameraRotation -= time * 0.1f;
+                CameraRotation -= time * 0.1f;
             }
 
-            cameraRotation += currentGamePadState.ThumbSticks.Right.X * time * 0.05f;
+            CameraRotation += currentGamePadState.ThumbSticks.Right.X * time * 0.05f;
 
             // Check for input to zoom camera in and out.
             if (currentKeyboardState.IsKeyDown(Keys.Z))
-                cameraDistance += time * 0.25f;
+                CameraDistance += time * 0.25f;
 
             if (currentKeyboardState.IsKeyDown(Keys.X))
-                cameraDistance -= time * 0.25f;
+                CameraDistance -= time * 0.25f;
 
-            cameraDistance += currentGamePadState.Triggers.Left * time * 0.25f;
-            cameraDistance -= currentGamePadState.Triggers.Right * time * 0.25f;
+            CameraDistance += currentGamePadState.Triggers.Left * time * 0.25f;
+            CameraDistance -= currentGamePadState.Triggers.Right * time * 0.25f;
 
             // Limit the arc movement.
-            if (cameraDistance > 11900.0f)
-                cameraDistance = 11900.0f;
-            else if (cameraDistance < 10.0f)
-                cameraDistance = 10.0f;
+            if (CameraDistance > 11900.0f)
+                CameraDistance = 11900.0f;
+            else if (CameraDistance < 10.0f)
+                CameraDistance = 10.0f;
 
             if (currentGamePadState.Buttons.RightStick == ButtonState.Pressed ||
                 currentKeyboardState.IsKeyDown(Keys.R))
             {
-                cameraArc = -30;
-                cameraRotation = 0;
-                cameraDistance = 100;
+                CameraArc = -30;
+                CameraRotation = 0;
+                CameraDistance = 100;
             }
 
-            view = Matrix.CreateTranslation(0, -10, 0) *
-                      Matrix.CreateRotationY(MathHelper.ToRadians(cameraRotation)) *
-                      Matrix.CreateRotationX(MathHelper.ToRadians(cameraArc)) *
-                      Matrix.CreateLookAt(new Vector3(0, 0, -cameraDistance),
+            View = Matrix.CreateTranslation(0, -10, 0) *
+                      Matrix.CreateRotationY(MathHelper.ToRadians(CameraRotation)) *
+                      Matrix.CreateRotationX(MathHelper.ToRadians(CameraArc)) *
+                      Matrix.CreateLookAt(new Vector3(0, 0, -CameraDistance),
                                           new Vector3(0, 0, 0), Vector3.Up);
 
-            position = Vector3.Transform(Vector3.Zero, Matrix.Invert(view));
+            Position = Vector3.Transform(Vector3.Zero, Matrix.Invert(View));
 
             float aspectRatio = (float)Game.Window.ClientBounds.Width /
                                 (float)Game.Window.ClientBounds.Height;
-            projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
+            Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
                                                                     aspectRatio,
-                                                                    nearPlaneDistance,
-                                                                    farPlaneDistance);
+                                                                    NearPlaneDistance,
+                                                                    FarPlaneDistance);
             base.Update(gameTime);
         }
     }
