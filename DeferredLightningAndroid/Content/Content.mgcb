@@ -10,7 +10,6 @@
 
 #-------------------------------- References --------------------------------#
 
-/reference:..\..\DeferredPipeline\bin\Debug\DeferredPipeline.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -28,16 +27,12 @@
 
 #begin OrgContent/Models/Ground.x
 /importer:XImporter
-/processor:DeferredRendererModel
-/processorParam:NormalMapTexture=null_normal.tga
-/processorParam:NormalMapKey=NormalMap
-/processorParam:GenerateTangentFrames=True
-/processorParam:SpecularMapTexture=null_normal.tga
-/processorParam:SpecularMapKey=SpecularMap
+/processor:ModelProcessor
 /processorParam:ColorKeyColor=0,0,0,0
 /processorParam:ColorKeyEnabled=True
 /processorParam:DefaultEffect=BasicEffect
 /processorParam:GenerateMipmaps=True
+/processorParam:GenerateTangentFrames=True
 /processorParam:PremultiplyTextureAlpha=True
 /processorParam:PremultiplyVertexColors=True
 /processorParam:ResizeTexturesToPowerOfTwo=False
@@ -45,8 +40,8 @@
 /processorParam:RotationY=0
 /processorParam:RotationZ=0
 /processorParam:Scale=1
-/processorParam:SwapWindingOrder=False
-/processorParam:TextureFormat=Compressed
+/processorParam:SwapWindingOrder=True
+/processorParam:TextureFormat=Color
 /build:OrgContent/Models/Ground.x
 
 #begin OrgContent/Models/ground_diffuse.jpg

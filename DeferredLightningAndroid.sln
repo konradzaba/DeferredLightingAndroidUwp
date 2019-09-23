@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.28307.539
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeferredLightingAndroid", "DeferredLightningAndroid\DeferredLightingAndroid.csproj", "{477E8705-B29C-4AF3-8B1A-B15646EEA4DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeferredPipeline", "DeferredPipeline\DeferredPipeline.csproj", "{85B393C9-B75B-4B4C-B675-3C57938BFCE4}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,14 +25,6 @@ Global
 		{477E8705-B29C-4AF3-8B1A-B15646EEA4DA}.Release|x64.ActiveCfg = Release|Any CPU
 		{477E8705-B29C-4AF3-8B1A-B15646EEA4DA}.Release|x64.Build.0 = Release|Any CPU
 		{477E8705-B29C-4AF3-8B1A-B15646EEA4DA}.Release|x64.Deploy.0 = Release|Any CPU
-		{85B393C9-B75B-4B4C-B675-3C57938BFCE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{85B393C9-B75B-4B4C-B675-3C57938BFCE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{85B393C9-B75B-4B4C-B675-3C57938BFCE4}.Debug|x64.ActiveCfg = Debug|x64
-		{85B393C9-B75B-4B4C-B675-3C57938BFCE4}.Debug|x64.Build.0 = Debug|x64
-		{85B393C9-B75B-4B4C-B675-3C57938BFCE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{85B393C9-B75B-4B4C-B675-3C57938BFCE4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{85B393C9-B75B-4B4C-B675-3C57938BFCE4}.Release|x64.ActiveCfg = Release|x64
-		{85B393C9-B75B-4B4C-B675-3C57938BFCE4}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
