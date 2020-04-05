@@ -91,6 +91,9 @@ namespace DeferredLightingAndroid
 
             CameraRotation += currentGamePadState.ThumbSticks.Right.X * time * 0.05f;
 
+            //android
+            CameraRotation += time * 0.02f;
+
             // Check for input to zoom camera in and out.
             if (currentKeyboardState.IsKeyDown(Keys.Z))
                 CameraDistance += time * 0.25f;
