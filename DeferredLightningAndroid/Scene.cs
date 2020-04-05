@@ -31,9 +31,9 @@ namespace DeferredLightingAndroid
             models[2] = game.Content.Load<Model>($"Data{Path.DirectorySeparatorChar}Models{Path.DirectorySeparatorChar}lizard");
             models[3] = game.Content.Load<Model>($"Data{Path.DirectorySeparatorChar}Models{Path.DirectorySeparatorChar}Ground");
 
-             groundDiffuse = game.Content.Load<Texture2D>($"Data{Path.DirectorySeparatorChar}Models{Path.DirectorySeparatorChar}ground_diffuse");
-             groundSpecular = game.Content.Load<Texture2D>($"Data{Path.DirectorySeparatorChar}Models{Path.DirectorySeparatorChar}ground_specular");
-             groundNormal = game.Content.Load<Texture2D>($"Data{Path.DirectorySeparatorChar}Models{Path.DirectorySeparatorChar}ground_normal");
+            groundDiffuse = game.Content.Load<Texture2D>($"Data{Path.DirectorySeparatorChar}Models{Path.DirectorySeparatorChar}ground_diffuse");
+            groundSpecular = game.Content.Load<Texture2D>($"Data{Path.DirectorySeparatorChar}Models{Path.DirectorySeparatorChar}ground_specular");
+            groundNormal = game.Content.Load<Texture2D>($"Data{Path.DirectorySeparatorChar}Models{Path.DirectorySeparatorChar}ground_normal");
 
             ship1Diffuse = game.Content.Load<Texture2D>($"Data{Path.DirectorySeparatorChar}Models{Path.DirectorySeparatorChar}ship1_c");
             ship1Specular = game.Content.Load<Texture2D>($"Data{Path.DirectorySeparatorChar}Models{Path.DirectorySeparatorChar}ship1_s");
@@ -62,6 +62,7 @@ namespace DeferredLightingAndroid
             game.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
             game.GraphicsDevice.BlendState = BlendState.Opaque;
 
+            //some textures are misaligned
             DrawModel(models[3], Matrix.CreateTranslation(0, -10, 0), camera, technique, groundDiffuse, groundSpecular, groundNormal);
             DrawModel(models[0], Matrix.CreateTranslation(-30, 0, -20), camera, technique, ship1Diffuse, ship1Specular, ship1Normal);
             DrawModel(models[1], Matrix.CreateTranslation(30, 0, -20), camera, technique, ship2Diffuse, ship2Specular, ship2Normal);

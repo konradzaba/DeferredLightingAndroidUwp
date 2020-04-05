@@ -12,42 +12,42 @@ namespace DeferredLightningUwp
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        GraphicsDeviceManager _graphics;
+        SpriteBatch _spriteBatch;
 
-        private Camera camera;
-        private QuadRenderComponent quadRenderer;
-        private Scene scene;
+        private Camera _camera;
+        private QuadRenderComponent _quadRenderer;
+        private Scene _scene;
 
-        private RenderTarget2D colorRT; //color and specular intensity
-        private RenderTarget2D normalRT; //normals + specular power
-        private RenderTarget2D depthRT; //depth
-        private RenderTarget2D lightRT; //lighting
+        private RenderTarget2D _colorRT; //color and specular intensity
+        private RenderTarget2D _normalRT; //normals + specular power
+        private RenderTarget2D _depthRT; //depth
+        private RenderTarget2D _lightRT; //lighting
 
-        private Effect clearBufferEffect;
-        private Effect directionalLightEffect;
+        private Effect _clearBufferEffect;
+        private Effect _directionalLightEffect;
+        private Effect _pointLightEffect;
+        private Effect _renderGBufferEffect;
 
-        private Effect pointLightEffect;
-        private Effect renderGBufferEffect;
+        private Model _sphereModel; //point light volume
 
-        private Model sphereModel; //point light volume
+        private Effect _finalCombineEffect;
 
-        private Effect finalCombineEffect;
+        private Vector2 _halfPixel;
 
-        private Vector2 halfPixel;
 
         public Game1()
         {
-            graphics = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            graphics.IsFullScreen = true;
-            graphics.PreferredBackBufferWidth = 800;
-            graphics.PreferredBackBufferHeight = 480;
-            graphics.GraphicsProfile = GraphicsProfile.HiDef;
-            graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
+            //graphics.IsFullScreen = true;
+            _graphics.PreferredBackBufferWidth = 1280;
+            _graphics.PreferredBackBufferHeight = 720;
+            _graphics.GraphicsProfile = GraphicsProfile.HiDef;
+            _graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
 
-            scene = new Scene(this);
+            _scene = new Scene(this);
         }
 
         /// <summary>
@@ -59,16 +59,14 @@ namespace DeferredLightningUwp
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            camera = new Camera(this);
-            camera.CameraArc = -30;
-            camera.CameraDistance = 50;
-            quadRenderer = new QuadRenderComponent(this);
-            this.Components.Add(camera);
+            _camera = new Camera(this);
+            _camera.CameraArc = -30;
+            _camera.CameraDistance = 50;
+            _quadRenderer = new QuadRenderComponent(this);
+            this.Components.Add(_camera);
             //this.Components.Add(quadRenderer);
 
             base.Initialize();
-
-
         }
 
         /// <summary>
@@ -77,13 +75,11 @@ namespace DeferredLightningUwp
         /// </summary>
         protected override void LoadContent()
         {
-
-
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            halfPixel = new Vector2()
+            _halfPixel = new Vector2()
             {
                 X = 0.5f / (float)GraphicsDevice.PresentationParameters.BackBufferWidth,
                 Y = 0.5f / (float)GraphicsDevice.PresentationParameters.BackBufferHeight
@@ -92,24 +88,25 @@ namespace DeferredLightningUwp
             int backbufferWidth = GraphicsDevice.PresentationParameters.BackBufferWidth;
             int backbufferHeight = GraphicsDevice.PresentationParameters.BackBufferHeight;
 
-            colorRT = new RenderTarget2D(GraphicsDevice, backbufferWidth, backbufferHeight, false, SurfaceFormat.Color, DepthFormat.Depth24);
-            normalRT = new RenderTarget2D(GraphicsDevice, backbufferWidth, backbufferHeight, false, SurfaceFormat.Color, DepthFormat.None);
-            depthRT = new RenderTarget2D(GraphicsDevice, backbufferWidth, backbufferHeight, false, SurfaceFormat.Single, DepthFormat.None);
-            lightRT = new RenderTarget2D(GraphicsDevice, backbufferWidth, backbufferHeight, false, SurfaceFormat.Color, DepthFormat.None);
+            _colorRT = new RenderTarget2D(GraphicsDevice, backbufferWidth, backbufferHeight, false, SurfaceFormat.Color, DepthFormat.Depth24);
+            _normalRT = new RenderTarget2D(GraphicsDevice, backbufferWidth, backbufferHeight, false, SurfaceFormat.Color, DepthFormat.None);
+            _depthRT = new RenderTarget2D(GraphicsDevice, backbufferWidth, backbufferHeight, false, SurfaceFormat.Single, DepthFormat.None);
+            _lightRT = new RenderTarget2D(GraphicsDevice, backbufferWidth, backbufferHeight, false, SurfaceFormat.Color, DepthFormat.None);
 
-            scene.InitializeScene(graphics.GraphicsDevice);
+            _scene.InitializeScene(_graphics.GraphicsDevice);
 
-            clearBufferEffect = LoadEffect("ClearGBuffer.mgfx", Content, GraphicsDevice);
-            directionalLightEffect = LoadEffect("DirectionalLight.mgfx", Content, GraphicsDevice); //this.Content.Load<Effect>("DirectionalLight");
-            finalCombineEffect = LoadEffect("CombineFinal.mgfx", Content, GraphicsDevice); //this.Content.Load<Effect>("CombineFinal");
-            pointLightEffect = LoadEffect("PointLight.mgfx", Content, GraphicsDevice); //this.Content.Load<Effect>("PointLight");
-            renderGBufferEffect = LoadEffect("RenderGBuffer.mgfx", Content, GraphicsDevice);//, out RenderHBufferEffectBytes); //this.Content.Load<Effect>("PointLight");
-            sphereModel = this.Content.Load<Model>(@"Data\Models\sphere");
+            _clearBufferEffect = LoadEffect("ClearGBuffer.mgfx", Content, GraphicsDevice);
+            _directionalLightEffect = LoadEffect("DirectionalLight.mgfx", Content, GraphicsDevice); //this.Content.Load<Effect>("DirectionalLight");
+            _finalCombineEffect = LoadEffect("CombineFinal.mgfx", Content, GraphicsDevice); //this.Content.Load<Effect>("CombineFinal");
+            _pointLightEffect = LoadEffect("PointLight.mgfx", Content, GraphicsDevice); //this.Content.Load<Effect>("PointLight");
+            _renderGBufferEffect = LoadEffect("RenderGBuffer.mgfx", Content, GraphicsDevice);//, out RenderHBufferEffectBytes); //this.Content.Load<Effect>("PointLight");
+            _sphereModel = this.Content.Load<Model>(@"Data\Models\sphere");
 
-            scene.OverwriteEffects(renderGBufferEffect);
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _scene.OverwriteEffects(_renderGBufferEffect);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
             base.LoadContent();
         }
+
         public static byte[] RenderHBufferEffectBytes;
         public Effect LoadEffect(string effectFileName, ContentManager content, GraphicsDevice device)
         {
@@ -164,7 +161,7 @@ namespace DeferredLightningUwp
         //}
         private void SetGBuffer()
         {
-            GraphicsDevice.SetRenderTargets(colorRT, normalRT, depthRT);
+            GraphicsDevice.SetRenderTargets(_colorRT, _normalRT, _depthRT);
         }
 
         private void ResolveGBuffer()
@@ -174,56 +171,56 @@ namespace DeferredLightningUwp
 
         private void ClearGBuffer()
         {
-            clearBufferEffect.Techniques[0].Passes[0].Apply();
-            quadRenderer.Render(Vector2.One * -1, Vector2.One);
+            _clearBufferEffect.Techniques[0].Passes[0].Apply();
+            _quadRenderer.Render(Vector2.One * -1, Vector2.One);
         }
 
         private void DrawDirectionalLight(Vector3 lightDirection, Color color)
         {
-            directionalLightEffect.Parameters["colorMap"].SetValue(colorRT);
-            directionalLightEffect.Parameters["normalMap"].SetValue(normalRT);
-            directionalLightEffect.Parameters["depthMap"].SetValue(depthRT);
+            _directionalLightEffect.Parameters["colorMap"].SetValue(_colorRT);
+            _directionalLightEffect.Parameters["normalMap"].SetValue(_normalRT);
+            _directionalLightEffect.Parameters["depthMap"].SetValue(_depthRT);
 
-            directionalLightEffect.Parameters["lightDirection"].SetValue(lightDirection);
-            directionalLightEffect.Parameters["Color"].SetValue(color.ToVector3());
+            _directionalLightEffect.Parameters["lightDirection"].SetValue(lightDirection);
+            _directionalLightEffect.Parameters["Color"].SetValue(color.ToVector3());
 
-            directionalLightEffect.Parameters["cameraPosition"].SetValue(camera.Position);
-            directionalLightEffect.Parameters["InvertViewProjection"].SetValue(Matrix.Invert(camera.View * camera.Projection));
+            _directionalLightEffect.Parameters["cameraPosition"].SetValue(_camera.Position);
+            _directionalLightEffect.Parameters["InvertViewProjection"].SetValue(Matrix.Invert(_camera.View * _camera.Projection));
 
-            directionalLightEffect.Parameters["halfPixel"].SetValue(halfPixel);
+            _directionalLightEffect.Parameters["halfPixel"].SetValue(_halfPixel);
 
-            directionalLightEffect.Techniques[0].Passes[0].Apply();
-            quadRenderer.Render(Vector2.One * -1, Vector2.One);
+            _directionalLightEffect.Techniques[0].Passes[0].Apply();
+            _quadRenderer.Render(Vector2.One * -1, Vector2.One);
         }
 
         private void DrawPointLight(Vector3 lightPosition, Color color, float lightRadius, float lightIntensity)
         {
             //set the G-Buffer parameters
-            pointLightEffect.Parameters["colorMap"].SetValue(colorRT);
-            pointLightEffect.Parameters["normalMap"].SetValue(normalRT);
-            pointLightEffect.Parameters["depthMap"].SetValue(depthRT);
+            _pointLightEffect.Parameters["colorMap"].SetValue(_colorRT);
+            _pointLightEffect.Parameters["normalMap"].SetValue(_normalRT);
+            _pointLightEffect.Parameters["depthMap"].SetValue(_depthRT);
 
             //compute the light world matrix
             //scale according to light radius, and translate it to light position
             Matrix sphereWorldMatrix = Matrix.CreateScale(lightRadius) * Matrix.CreateTranslation(lightPosition);
-            pointLightEffect.Parameters["World"].SetValue(sphereWorldMatrix);
-            pointLightEffect.Parameters["View"].SetValue(camera.View);
-            pointLightEffect.Parameters["Projection"].SetValue(camera.Projection);
+            _pointLightEffect.Parameters["World"].SetValue(sphereWorldMatrix);
+            _pointLightEffect.Parameters["View"].SetValue(_camera.View);
+            _pointLightEffect.Parameters["Projection"].SetValue(_camera.Projection);
             //light position
-            pointLightEffect.Parameters["lightPosition"].SetValue(lightPosition);
+            _pointLightEffect.Parameters["lightPosition"].SetValue(lightPosition);
 
             //set the color, radius and Intensity
-            pointLightEffect.Parameters["Color"].SetValue(color.ToVector3());
-            pointLightEffect.Parameters["lightRadius"].SetValue(lightRadius);
-            pointLightEffect.Parameters["lightIntensity"].SetValue(lightIntensity);
+            _pointLightEffect.Parameters["Color"].SetValue(color.ToVector3());
+            _pointLightEffect.Parameters["lightRadius"].SetValue(lightRadius);
+            _pointLightEffect.Parameters["lightIntensity"].SetValue(lightIntensity);
 
             //parameters for specular computations
-            pointLightEffect.Parameters["cameraPosition"].SetValue(camera.Position);
-            pointLightEffect.Parameters["InvertViewProjection"].SetValue(Matrix.Invert(camera.View * camera.Projection));
+            _pointLightEffect.Parameters["cameraPosition"].SetValue(_camera.Position);
+            _pointLightEffect.Parameters["InvertViewProjection"].SetValue(Matrix.Invert(_camera.View * _camera.Projection));
             //size of a halfpixel, for texture coordinates alignment
-            pointLightEffect.Parameters["halfPixel"].SetValue(halfPixel);
+            _pointLightEffect.Parameters["halfPixel"].SetValue(_halfPixel);
             //calculate the distance between the camera and light center
-            float cameraToCenter = Vector3.Distance(camera.Position, lightPosition);
+            float cameraToCenter = Vector3.Distance(_camera.Position, lightPosition);
             //if we are inside the light volume, draw the sphere's inside face
             if (cameraToCenter < lightRadius)
                 GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
@@ -232,8 +229,8 @@ namespace DeferredLightningUwp
 
             GraphicsDevice.DepthStencilState = DepthStencilState.None;
 
-            pointLightEffect.Techniques[0].Passes[0].Apply();
-            foreach (ModelMesh mesh in sphereModel.Meshes)
+            _pointLightEffect.Techniques[0].Passes[0].Apply();
+            foreach (ModelMesh mesh in _sphereModel.Meshes)
             {
                 foreach (ModelMeshPart meshPart in mesh.MeshParts)
                 {
@@ -263,17 +260,17 @@ namespace DeferredLightningUwp
             //ResolveGBuffer();
 
             //GraphicsDevice.SetRenderTargets(colorRT, normalRT, depthRT);
-            GraphicsDevice.SetRenderTargets(colorRT);
+            GraphicsDevice.SetRenderTargets(_colorRT);
             ClearGBuffer();
-            scene.DrawScene(camera, gameTime, "Color");
+            _scene.DrawScene(_camera, gameTime, "Color");
             ResolveGBuffer();
-            GraphicsDevice.SetRenderTargets(normalRT);
+            GraphicsDevice.SetRenderTargets(_normalRT);
             ClearGBuffer();
-            scene.DrawScene(camera, gameTime, "Normal");
+            _scene.DrawScene(_camera, gameTime, "Normal");
             ResolveGBuffer();
-            GraphicsDevice.SetRenderTargets(depthRT);
+            GraphicsDevice.SetRenderTargets(_depthRT);
             ClearGBuffer();
-            scene.DrawScene(camera, gameTime, "Depth");
+            _scene.DrawScene(_camera, gameTime, "Depth");
             ResolveGBuffer();
 
             DrawLights(gameTime);
@@ -283,7 +280,7 @@ namespace DeferredLightningUwp
 
         private void DrawLights(GameTime gameTime)
         {
-            GraphicsDevice.SetRenderTarget(lightRT);
+            GraphicsDevice.SetRenderTarget(_lightRT);
             GraphicsDevice.Clear(Color.Transparent);
             GraphicsDevice.BlendState = BlendState.AlphaBlend;
             GraphicsDevice.DepthStencilState = DepthStencilState.None;
@@ -320,12 +317,12 @@ namespace DeferredLightningUwp
             GraphicsDevice.SetRenderTarget(null);
 
             //Combine everything
-            finalCombineEffect.Parameters["colorMap"].SetValue(colorRT);
-            finalCombineEffect.Parameters["lightMap"].SetValue(lightRT);
-            finalCombineEffect.Parameters["halfPixel"].SetValue(halfPixel);
+            _finalCombineEffect.Parameters["colorMap"].SetValue(_colorRT);
+            _finalCombineEffect.Parameters["lightMap"].SetValue(_lightRT);
+            _finalCombineEffect.Parameters["halfPixel"].SetValue(_halfPixel);
 
-            finalCombineEffect.Techniques[0].Passes[0].Apply();
-            quadRenderer.Render(Vector2.One * -1, Vector2.One);
+            _finalCombineEffect.Techniques[0].Passes[0].Apply();
+            _quadRenderer.Render(Vector2.One * -1, Vector2.One);
 
             //Output FPS and 'credits'
             double fps = (1000 / gameTime.ElapsedGameTime.TotalMilliseconds);

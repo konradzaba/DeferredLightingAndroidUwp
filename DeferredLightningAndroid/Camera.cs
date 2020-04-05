@@ -20,8 +20,8 @@ namespace DeferredLightingAndroid
 
         public Matrix Projection { get; private set; }
 
-        KeyboardState currentKeyboardState = new KeyboardState();
-        GamePadState currentGamePadState = new GamePadState();
+        KeyboardState _currentKeyboardState = new KeyboardState();
+        GamePadState _currentGamePadState = new GamePadState();
 
         public Camera(Game game)
             : base(game)
@@ -47,28 +47,29 @@ namespace DeferredLightingAndroid
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-
-            currentKeyboardState = Keyboard.GetState();
-            currentGamePadState = GamePad.GetState(PlayerIndex.One);
+            _currentKeyboardState = Keyboard.GetState();
+            _currentGamePadState = GamePad.GetState(PlayerIndex.One);
 
             // TODO: Add your update code here
 
             float time = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            CameraRotation += time * 0.02f;
 
+            /*
             // Check for input to rotate the camera up and down around the model.
-            if (currentKeyboardState.IsKeyDown(Keys.Up) ||
-                currentKeyboardState.IsKeyDown(Keys.W))
+            if (_currentKeyboardState.IsKeyDown(Keys.Up) ||
+                _currentKeyboardState.IsKeyDown(Keys.W))
             {
                 CameraArc += time * 0.1f;
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.Down) ||
-                currentKeyboardState.IsKeyDown(Keys.S))
+            if (_currentKeyboardState.IsKeyDown(Keys.Down) ||
+                _currentKeyboardState.IsKeyDown(Keys.S))
             {
                 CameraArc -= time * 0.1f;
             }
 
-            CameraArc += currentGamePadState.ThumbSticks.Right.Y * time * 0.05f;
+            CameraArc += _currentGamePadState.ThumbSticks.Right.Y * time * 0.05f;
 
             // Limit the arc movement.
             if (CameraArc > 90.0f)
@@ -77,32 +78,32 @@ namespace DeferredLightingAndroid
                 CameraArc = -90.0f;
 
             // Check for input to rotate the camera around the model.
-            if (currentKeyboardState.IsKeyDown(Keys.Right) ||
-                currentKeyboardState.IsKeyDown(Keys.D))
+            if (_currentKeyboardState.IsKeyDown(Keys.Right) ||
+                _currentKeyboardState.IsKeyDown(Keys.D))
             {
                 CameraRotation += time * 0.1f;
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.Left) ||
-                currentKeyboardState.IsKeyDown(Keys.A))
+            if (_currentKeyboardState.IsKeyDown(Keys.Left) ||
+                _currentKeyboardState.IsKeyDown(Keys.A))
             {
                 CameraRotation -= time * 0.1f;
             }
 
-            CameraRotation += currentGamePadState.ThumbSticks.Right.X * time * 0.05f;
+            CameraRotation += _currentGamePadState.ThumbSticks.Right.X * time * 0.05f;
 
             //android
             CameraRotation += time * 0.02f;
 
             // Check for input to zoom camera in and out.
-            if (currentKeyboardState.IsKeyDown(Keys.Z))
+            if (_currentKeyboardState.IsKeyDown(Keys.Z))
                 CameraDistance += time * 0.25f;
 
-            if (currentKeyboardState.IsKeyDown(Keys.X))
+            if (_currentKeyboardState.IsKeyDown(Keys.X))
                 CameraDistance -= time * 0.25f;
 
-            CameraDistance += currentGamePadState.Triggers.Left * time * 0.25f;
-            CameraDistance -= currentGamePadState.Triggers.Right * time * 0.25f;
+            CameraDistance += _currentGamePadState.Triggers.Left * time * 0.25f;
+            CameraDistance -= _currentGamePadState.Triggers.Right * time * 0.25f;
 
             // Limit the arc movement.
             if (CameraDistance > 11900.0f)
@@ -110,14 +111,14 @@ namespace DeferredLightingAndroid
             else if (CameraDistance < 10.0f)
                 CameraDistance = 10.0f;
 
-            if (currentGamePadState.Buttons.RightStick == ButtonState.Pressed ||
-                currentKeyboardState.IsKeyDown(Keys.R))
+            if (_currentGamePadState.Buttons.RightStick == ButtonState.Pressed ||
+                _currentKeyboardState.IsKeyDown(Keys.R))
             {
                 CameraArc = -30;
                 CameraRotation = 0;
                 CameraDistance = 100;
             }
-
+            */
             View = Matrix.CreateTranslation(0, -10, 0) *
                       Matrix.CreateRotationY(MathHelper.ToRadians(CameraRotation)) *
                       Matrix.CreateRotationX(MathHelper.ToRadians(CameraArc)) *
